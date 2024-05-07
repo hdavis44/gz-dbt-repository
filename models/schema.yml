@@ -1,0 +1,45 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: gz_raw_data
+    description: schema holding our raw data
+    tables:
+
+      - name: product
+        identifier: raw_gz_product
+        columns:
+          - name: products_id
+            description: primary key
+            tests:
+              - unique
+              - not_null
+              
+      - name: sales
+        identifier: raw_gz_sales
+        tests:
+          - unique:
+              column_name: "(orders_id || '-' || pdt_id)"
+          - not_null:
+              column_name: "(orders_id || '-' || pdt_id)"
+        columns:
+          - name: orders_id
+            description: forms PK when combined with pdt_id
+          - name: pdt_id
+            description: forms PK when combined with orders_id
+        freshness: 
+          warn_after:
+            count: 90
+            period: day
+        loaded_at_field: "CAST(date_date AS TIMESTAMP)"
+        
+
+      - name: ship
+        identifier: raw_gz_ship
+        columns:
+          - name: orders_id
+            description: primary key
+            tests:
+              - unique
+              - not_null
+              
