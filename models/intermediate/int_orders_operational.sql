@@ -1,14 +1,15 @@
 SELECT
     o.orders_id
     ,o.date_date
-    ,ROUND(o.margin + sh.shipping_fee - sh.log_cost - sh.ship_cost,2) AS operational_margin
-    ,o.quantity
+    ,ROUND(o.margin + s.shipping_fee - s.log_cost - s.ship_cost,2) AS operational_margin
     ,o.revenue
+    ,o.quantity
+    ,o.purchase_price
     ,o.purchase_cost
     ,o.margin
-    ,sh.shipping_fee
-    ,sh.log_cost
-    ,sh.ship_cost
+    ,s.shipping_fee
+    ,s.log_cost
+    ,s.ship_cost
 FROM {{ref("int_orders_margin")}} AS o
-LEFT JOIN {{ref("stg_raw__ship")}} AS sh
-    ON o.orders_id = sh.orders_id
+LEFT JOIN {{ref("stg_raw__ship")}} AS s
+    ON o.orders_id = s.orders_id
