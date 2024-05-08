@@ -6,6 +6,7 @@ SELECT
     ,ROUND(SUM(purchase_price),2) AS purchase_price
     ,ROUND(SUM(purchase_cost),2) AS purchase_cost
     ,ROUND(SUM(margin),2) AS margin
+    ,{{ margin_percent('revenue', 'purchase_cost') }} AS margin_percent
 FROM {{ref("int_sales_margin")}}
 GROUP BY date_date, orders_id
 ORDER BY orders_id DESC
